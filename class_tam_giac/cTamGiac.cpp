@@ -2,11 +2,11 @@
 #include<iostream>
 #include<cmath>
 #include "graphics.h"
-
 #pragma comment(lib, "graphics.lib")
 using namespace std;
 #define epsilon  1e-6
 constexpr double PI = 3.14159265358979323846;
+//Ham nhap diem va kiem tra du lieu dau vao
 void Diem::Nhap()
 {
 	cin >> x;
@@ -26,42 +26,52 @@ void Diem::Nhap()
 		cin >> y;
 	}
 }
+//Ham xuat thong tin diem duoc nhap
 void Diem::Xuat() const
 {
 	cout << "(" << x << ", " << y << ")";
 }
+//Ham tinh va tra ve khoang cach tu diem this den diem d duoc truyen vao
 double Diem::KhoangCach(Diem d) const
 {
 	return sqrt(pow(x - d.x, 2) + pow(y - d.y, 2));
 }
+//Ham nhan vao 2 gia tri dx dy de thay doi gia tri cua 1 diem
 void Diem::DiChuyen(int dx, int dy)
 {
 	x += dx;
 	y += dy;
 }
+//Ham getter tra ve gia tri cua toa do x
 double Diem::getX() const
 {
 	return x;
 }
+//Ham getter tra ve gia tri cua toa do y
 double Diem::getY() const
 {
 	return y;
 }
+//Ham setter dung de thay doi gia tri cua toa do x
 void Diem::setX(double x)
 {
 	this->x = x;
 }
+//Ham setter dung de thay doi gia tri cua toa do y
 void Diem::setY(double y)
 {
 	this->y = y;
 }
+//Ham construction khoi tao lop tam giac khong truyen vao tham so
 cTamGiac::cTamGiac() {}
+//Ham construction khoi tao lop tam giac co truyen vao tham so
 cTamGiac::cTamGiac(Diem a, Diem b, Diem c)
 {
 	this->a = a;
 	this->b = b;
 	this->c = c;
 }
+//Nap chong toan tu nhap, nhap 3 diem cua 1 tam giac
 istream& operator>>(istream& is, cTamGiac& x)
 {
 	cout << "Nhap 3 diem cua tam giac: "<<endl;
@@ -73,6 +83,7 @@ istream& operator>>(istream& is, cTamGiac& x)
 	x.c.Nhap();
 	return is;
 }
+//Nhap chong toan tu xuat, xuat lan luot 3 dinh cua tam giac
 ostream& operator<<(ostream& os, cTamGiac x)
 {
 	os << "Diem A: "; x.a.Xuat(); cout << endl;
@@ -80,6 +91,8 @@ ostream& operator<<(ostream& os, cTamGiac x)
 	os << "Diem C: "; x.c.Xuat();
 	return os;
 }
+//Ham ve tam giac trong cua so 800x600, su dung thu vien graphics
+//Ham tinh toan de hinh tam giac to hon, dua ve giua cua so
 void cTamGiac::ve_tam_giac()
 {
 	initwindow(800, 600);
@@ -92,6 +105,7 @@ void cTamGiac::ve_tam_giac()
 	line(c.getX() * 10 + offsetX, -c.getY() * 10 + offsetY,
 		a.getX() * 10 + offsetX, -a.getY() * 10 + offsetY);
 }
+//Ham tinh toan do dai cac canh cua tam giac va kiem tra xem tam giac co hop le khong
 bool cTamGiac::Ktra() const
 {
 	double x = a.KhoangCach(b);
@@ -99,6 +113,7 @@ bool cTamGiac::Ktra() const
 	double z = a.KhoangCach(c);
 	return x > 0 && y > 0 && z > 0 && x + y > z && x + z > y && y + z > x;
 }
+//Ham tinh toan do dai cac canh cua tam giac va tra ve chuoi ten loai tam giac
 string cTamGiac::PhanLoaiTamGiac() const
 {
 	double x = a.KhoangCach(b);
@@ -127,6 +142,7 @@ string cTamGiac::PhanLoaiTamGiac() const
 
 	return kq;
 }
+//Ham tinh toan do dai cac canh, tinh va tra ve chu vi tam giac
 double cTamGiac::ChuVi() const
 {
 	double x = a.KhoangCach(b);
@@ -134,6 +150,7 @@ double cTamGiac::ChuVi() const
 	double z = a.KhoangCach(c);
 	return x + y + z;
 }
+//Ham tinh toan do dai cac canh, tinh va tra ve dien tich tam giac
 double cTamGiac::DienTich() const
 {
 	double x = a.KhoangCach(b);
@@ -142,12 +159,14 @@ double cTamGiac::DienTich() const
 	double p = (x + y + z) / 2;
 	return sqrt(p * (p - x) * (p - y) * (p - z));
 }
+//Ham nhan vao 1 vector va di chuyen toa do cac dinh tam giac theo vector ay
 void cTamGiac::TinhTien(int x, int y)
 {
 	a.DiChuyen(x, y);
 	b.DiChuyen(x, y);
 	c.DiChuyen(x, y);
 }
+//Ham nhan vao tam quay va goc quay va tinh toan theo cong thuc quay tam giac
 void cTamGiac::Quay(int x, int y, int p)
 {	
 	double phi = p * PI / 180;
@@ -162,6 +181,7 @@ void cTamGiac::Quay(int x, int y, int p)
 	b.setX(t2.getX()); b.setY(t2.getY());
 	c.setX(t3.getX()); c.setY(t3.getY());
 }
+//Ham nhan vao tam vi tu, he so k, de phong to neu k > 1 va thu nho neu 0<k<1 theo cong thuc
 void cTamGiac::PhongTo_ThuNho(double x, double y, double k)
 {
 	a.setX(k * (a.getX() - x) + x);
